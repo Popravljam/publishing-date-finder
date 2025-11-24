@@ -38,20 +38,40 @@ This ensures you get the publication date of the actual article you're reading, 
 
 ## Installation
 
-### Option 1: Direct Installation (Recommended)
-**One-click install**: [Download publishing_date_finder-1.2.5.xpi](https://github.com/Popravljam/publishing-date-finder/releases/download/v1.2.4/publishing_date_finder-1.2.5.xpi)
+### Firefox
+
+**Option 1: Direct Installation (Recommended)**
+
+[Download publishing_date_finder-1.2.5.xpi](https://github.com/Popravljam/publishing-date-finder/releases/download/v1.2.4/publishing_date_finder-1.2.5.xpi)
 
 Firefox will prompt to install. Click "Add" to install permanently.
 
-### Option 2: Firefox Add-ons Store
+**Option 2: Firefox Add-ons Store**
+
 Coming soon to [addons.mozilla.org](https://addons.mozilla.org/)
 
-### Option 3: Manual Installation (Development)
-1. Download and extract the [latest release](https://github.com/Popravljam/publishing-date-finder/releases/latest)
-2. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
-3. Click "Load Temporary Add-on"
-4. Select `manifest.json` from the extracted folder
-5. Note: Temporary installations are removed when Firefox restarts
+### Chrome / Edge
+
+**Option 1: Chrome Web Store**
+
+Coming soon to Chrome Web Store
+
+**Option 2: Manual Installation (Self-Hosted)**
+
+1. Download [publishing-date-finder-chrome-v1.2.5.zip](https://github.com/Popravljam/publishing-date-finder/releases/latest)
+2. Extract the zip file
+3. Open Chrome and go to `chrome://extensions/`
+4. Enable "Developer mode" (toggle in top-right)
+5. Click "Load unpacked"
+6. Select the extracted `build-chrome` folder
+
+**Note**: Manual installations show a developer mode warning but work perfectly.
+
+### Development/Testing
+
+**Firefox**: Load temporary add-on from `about:debugging#/runtime/this-firefox`
+
+**Chrome**: Load unpacked from `chrome://extensions/` with Developer mode enabled
 
 ## Usage
 
