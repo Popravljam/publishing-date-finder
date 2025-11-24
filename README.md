@@ -32,38 +32,7 @@ A powerful Firefox extension that detects publication dates from web pages using
 5. The addon is now installed temporarily
 
 ### Permanent Installation
-1. Create a `.xpi` package (see below)
-2. Install through Firefox Add-ons manager
-
-## Creating Icons
-
-Before using the addon, you need to create icon files. You can use any 48x48 and 96x96 PNG images. Here's a quick way to create simple placeholder icons:
-
-### Using ImageMagick (if installed):
-```bash
-cd date-detective-addon/icons
-# Create 48x48 icon
-convert -size 48x48 xc:transparent -fill "#667eea" -draw "circle 24,24 24,4" \
-  -fill white -font Arial -pointsize 28 -gravity center -annotate +0+0 "📅" icon-48.png
-
-# Create 96x96 icon
-convert -size 96x96 xc:transparent -fill "#667eea" -draw "circle 48,48 48,8" \
-  -fill white -font Arial -pointsize 56 -gravity center -annotate +0+0 "📅" icon-96.png
-```
-
-### Or manually:
-1. Create two PNG files: `icon-48.png` (48x48 pixels) and `icon-96.png` (96x96 pixels)
-2. Use any calendar/date-related icon
-3. Place them in the `icons/` folder
-
-### Quick placeholder (macOS):
-```bash
-cd date-detective-addon/icons
-# Create simple colored squares as placeholders
-# You'll need to replace these with proper icons later
-sips -z 48 48 --setProperty format png /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Clock.icns --out icon-48.png 2>/dev/null || echo "Please create icon-48.png manually"
-sips -z 96 96 --setProperty format png /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Clock.icns --out icon-96.png 2>/dev/null || echo "Please create icon-96.png manually"
-```
+Download from the Firefox Add-ons store (coming soon) or install the `.xpi` package.
 
 ## Usage
 
