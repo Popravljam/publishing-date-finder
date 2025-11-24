@@ -173,9 +173,14 @@
       const timeElements = document.querySelectorAll('time[datetime]');
       let firstMainArticleDate = null;
       
-      // Check if we already have an Open Graph date - if so, be more conservative with time elements
+      // Check if we already have an Open Graph date - if so, skip time elements entirely
       const hasOpenGraphDate = document.querySelector('meta[property="og:published_time"], meta[property="og:article:published_time"], meta[property="og:datePublished"]');
-      const shouldBeConservative = !!hasOpenGraphDate;
+      
+      // If we have reliable Open Graph metadata, don't use HTML time elements at all
+      // OG is publisher-controlled and more reliable than time elements which can be anywhere
+      if (hasOpenGraphDate) {
+        return results; // Return empty - trust OG over time elements
+      }
 
       timeElements.forEach(element => {
         // Skip if element is inside a link to another page (related articles)
@@ -223,13 +228,8 @@
           confidence = this.CONFIDENCE.MEDIUM;
         }
 
-        // If Open Graph metadata exists, be very conservative with time elements
-        if (shouldBeConservative && isNotFirst) {
-          // If we have OG and this isn't the first time element, it's probably embedded content
-          confidence = this.CONFIDENCE.LOW;
-        }
         // Try to determine what type of date this is
-        else if (classList.includes('updated') || classList.includes('modified') || 
+        if (classList.includes('updated') || classList.includes('modified') ||
             parentText.includes('updated') || parentText.includes('modified')) {
           type = 'Modified';
           confidence = this.CONFIDENCE.MEDIUM;
