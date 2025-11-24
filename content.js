@@ -216,6 +216,8 @@
         const className = current.className ? current.className.toLowerCase() : '';
         const id = current.id ? current.id.toLowerCase() : '';
         const role = current.getAttribute('role') || '';
+        const dataTestId = (current.getAttribute('data-testid') || '').toLowerCase();
+        const dataComponent = (current.getAttribute('data-component') || '').toLowerCase();
         
         // Check if this container has multiple time/date elements (likely an article list)
         if (depth > 0 && depth < 5) {
@@ -224,6 +226,17 @@
             // This container has multiple dates, likely a list of articles
             return true;
           }
+        }
+        
+        // Check data attributes (used by BBC and other sites)
+        if (dataTestId.includes('promo') || dataTestId.includes('card') || 
+            dataTestId.includes('list') || dataTestId.includes('related')) {
+          return true;
+        }
+        
+        if (dataComponent.includes('promo') || dataComponent.includes('card') ||
+            dataComponent.includes('related') || dataComponent.includes('recommendations')) {
+          return true;
         }
         
         // Common patterns for excluded areas
@@ -256,7 +269,15 @@
           'secondary', 'complementary', 'auxiliary',
           // Lists and grids of other content
           'grid', 'list', 'carousel', 'slider',
-          'tile', 'card-list', 'feed'
+          'tile', 'card-list', 'feed',
+          // BBC-specific
+          'promo', 'bbc-', 'top-story', 'story-promo',
+          'media-list', 'link-list',
+          // General article lists
+          'article-promo', 'post-promo', 'story-card',
+          'content-list', 'news-list', 'item-list',
+          // "More" sections
+          'more', 'extra', 'additional', 'see-also'
         ];
 
         // Check if any excluded pattern matches
