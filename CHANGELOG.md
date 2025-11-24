@@ -5,6 +5,20 @@ All notable changes to Publishing Date Finder will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2025-11-24
+
+### Improved
+- **Enhanced BBC and news site filtering**: Added detection for `data-testid` and `data-component` attributes commonly used by BBC and other major news sites
+- **40+ exclusion patterns**: Expanded from initial list to over 40 comprehensive patterns including BBC-specific ones (story-promo, media-list, top-story)
+- **Multi-date container detection**: Automatically filters containers with 3+ date elements (article lists, recommended sections)
+- **Better carousel/grid detection**: Added filtering for sliders, carousels, tiles, and card-lists
+- **More sidebar variations**: Catches read-more, you-may-like, continue-reading, and similar patterns
+
+### Fixed
+- Significantly reduced false positives from BBC Serbian and other BBC sites
+- Better filtering of "related articles" and "top stories" sections
+- Improved accuracy on news sites with complex layouts
+
 ## [1.2.0] - 2025-11-24
 
 ### Improved
@@ -54,6 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Privacy-focused design with no data collection
 - Custom logo with magnifying glass and clock icon
 
+[1.2.1]: https://github.com/Popravljam/publishing-date-finder/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/Popravljam/publishing-date-finder/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/Popravljam/publishing-date-finder/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Popravljam/publishing-date-finder/releases/tag/v1.0.0

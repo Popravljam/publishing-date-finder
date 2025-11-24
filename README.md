@@ -5,9 +5,9 @@
 
 A powerful Firefox extension that detects publication dates from web pages using multiple detection methods with confidence indicators. Perfect for journalists, researchers, and anyone who needs to verify when content was published.
 
-## 🆕 What's New in v1.2.0
+## 🆕 What's New in v1.2.1
 
-**Smart Content Filtering** - The extension now intelligently filters out dates from sidebars, recommended articles, and navigation. This significantly improves accuracy on news sites and blogs with multiple dates on the same page. [See full changelog](CHANGELOG.md)
+**Enhanced News Site Filtering** - Significantly improved filtering for BBC and other major news sites. Now detects data attributes, filters article lists with multiple dates, and catches 40+ sidebar patterns including BBC-specific ones. Tested and optimized for BBC Serbian and international news sites. [See full changelog](CHANGELOG.md)
 
 ## Features
 
