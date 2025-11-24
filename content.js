@@ -154,6 +154,7 @@
           if (itemprop === 'dateModified') type = 'Modified';
           if (itemprop === 'dateCreated') type = 'Created';
 
+          // Microdata is always high confidence (structured data)
           results.push({
             date: date,
             type: type,
@@ -180,9 +181,15 @@
         const datetime = element.getAttribute('datetime');
         const classList = element.className.toLowerCase();
         const parentText = element.parentElement?.textContent.toLowerCase() || '';
+        const isInMainArticle = this.isInMainArticle(element);
 
         let type = 'Published';
         let confidence = this.CONFIDENCE.MEDIUM;
+
+        // Higher confidence if in main article area
+        if (isInMainArticle) {
+          confidence = this.CONFIDENCE.HIGH;
+        }
 
         // Try to determine what type of date this is
         if (classList.includes('updated') || classList.includes('modified') || 
@@ -191,7 +198,7 @@
         } else if (classList.includes('published') || classList.includes('posted') ||
                    parentText.includes('published') || parentText.includes('posted')) {
           type = 'Published';
-          confidence = this.CONFIDENCE.HIGH;
+          confidence = this.CONFIDENCE.HIGH; // Always high for explicitly marked dates
         }
 
         results.push({
