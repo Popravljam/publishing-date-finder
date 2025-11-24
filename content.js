@@ -448,20 +448,65 @@
       const bodyText = document.body.textContent;
       
       // Look for common date patterns in text
+      // Top 10 languages by speakers: English, Mandarin, Hindi, Spanish, French, Arabic, Bengali, Portuguese, Russian, Japanese
+      const publishKeywords = 'published|posted|created|written|' +
+        // Spanish
+        'publicado|creado|escrito|' +
+        // French
+        'publié|créé|écrit|' +
+        // German
+        'veröffentlicht|erstellt|geschrieben|' +
+        // Portuguese
+        'publicado|criado|escrito|' +
+        // Russian (Cyrillic)
+        'опубликовано|написано|создано|' +
+        // Japanese (Hiragana/Katakana)
+        '公開|投稿|' +
+        // Hindi (Devanagari)
+        'प्रकाशित|लिखा|' +
+        // Arabic
+        'نشر|كتب|' +
+        // Mandarin (Simplified)
+        '发布|创建|写|' +
+        // Italian
+        'pubblicato|scritto';
+      
+      const updateKeywords = 'updated|modified|edited|' +
+        // Spanish
+        'actualizado|modificado|editado|' +
+        // French
+        'modifié|mis à jour|édité|' +
+        // German
+        'aktualisiert|geändert|bearbeitet|' +
+        // Portuguese
+        'atualizado|modificado|editado|' +
+        // Russian
+        'обновлено|изменено|' +
+        // Japanese
+        '更新|修正|' +
+        // Hindi
+        'अद्यतन|संशोधित|' +
+        // Arabic
+        'حدث|عدل|' +
+        // Mandarin
+        '更新|修改|' +
+        // Italian
+        'aggiornato|modificato';
+
       const datePatterns = [
         // With keywords - MEDIUM confidence
         // "Published: January 15, 2024" or "Published on January 15, 2024"
-        /(?:published|posted|created|written|veröffentlicht|publié|pubblicato)(?:\s+on|\s+am)?[\s:]+([A-Za-z]+\s+\d{1,2},?\s+\d{4})/i,
+        new RegExp(`(?:${publishKeywords})(?:\\s+on|\\s+am)?[\\s:]+([A-Za-zÀ-ſ\u4e00-\u9fff\u0900-\u097f\u0600-\u06ff\u3040-\u309f\u30a0-\u30ff]+\\s+\\d{1,2},?\\s+\\d{4})`, 'i'),
         // "Updated: January 15, 2024"
-        /(?:updated|modified|edited|aktualisiert|modifié|aggiornato)(?:\s+on|\s+am)?[\s:]+([A-Za-z]+\s+\d{1,2},?\s+\d{4})/i,
+        new RegExp(`(?:${updateKeywords})(?:\\s+on|\\s+am)?[\\s:]+([A-Za-zÀ-ſ\u4e00-\u9fff\u0900-\u097f\u0600-\u06ff\u3040-\u309f\u30a0-\u30ff]+\\s+\\d{1,2},?\\s+\\d{4})`, 'i'),
         // "15 January 2024" with keyword
-        /(?:published|posted|created|written|veröffentlicht|publié)(?:\s+on|\s+am)?[\s:]+(\d{1,2}\s+[A-Za-z]+\s+\d{4})/i,
+        new RegExp(`(?:${publishKeywords})(?:\\s+on|\\s+am)?[\\s:]+(\\d{1,2}\\s+[A-Za-zÀ-ſ\u4e00-\u9fff\u0900-\u097f\u0600-\u06ff]+\\s+\\d{4})`, 'i'),
         // ISO format with keyword
-        /(?:published|posted|created|written|veröffentlicht|publié)(?:\s+on|\s+am)?[\s:]+(\d{4}-\d{2}-\d{2})/i,
-        // DD.MM.YYYY with keyword (German/European)
-        /(?:published|posted|created|written|veröffentlicht|publié)(?:\s+on|\s+am)?[\s:]+(\d{1,2}\.\d{1,2}\.\d{4})/i,
+        new RegExp(`(?:${publishKeywords})(?:\\s+on|\\s+am)?[\\s:]+(\\d{4}-\\d{2}-\\d{2})`, 'i'),
+        // DD.MM.YYYY with keyword (European)
+        new RegExp(`(?:${publishKeywords})(?:\\s+on|\\s+am)?[\\s:]+(\\d{1,2}\\.\\d{1,2}\\.\\d{4})`, 'i'),
         // MM/DD/YYYY with keyword
-        /(?:published|posted|created|written|veröffentlicht|publié)(?:\s+on|\s+am)?[\s:]+(\d{1,2}\/\d{1,2}\/\d{4})/i,
+        new RegExp(`(?:${publishKeywords})(?:\\s+on|\\s+am)?[\\s:]+(\\d{1,2}\\/\\d{1,2}\\/\\d{4})`, 'i'),
         
         // Standalone formats - LOW confidence
         // "January 15, 2024" or "15 January 2024"
@@ -484,8 +529,9 @@
         const pattern = datePatterns[i];
         const match = textToSearch.match(pattern);
         if (match) {
-          const isUpdate = /updated|modified|edited|aktualisiert|modifié|aggiornato/i.test(match[0]);
-          const hasKeyword = /published|posted|created|written|updated|modified|edited|veröffentlicht|publié|pubblicato|aktualisiert/i.test(match[0]);
+          // Check if it's an update keyword (expanded for all languages)
+          const isUpdate = new RegExp(updateKeywords, 'i').test(match[0]);
+          const hasKeyword = new RegExp(`${publishKeywords}|${updateKeywords}`, 'i').test(match[0]);
           
           // First 6 patterns have keywords = MEDIUM confidence
           // Remaining patterns are standalone = LOW confidence
