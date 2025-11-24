@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Publishing Date Finder",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Detects publication dates of web articles with confidence indicators",
   "icons": {
     "48": "icons/icon-48.png",
