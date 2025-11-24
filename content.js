@@ -174,6 +174,13 @@
       let firstMainArticleDate = null;
 
       timeElements.forEach(element => {
+        // Skip if element is inside a link to another page (related articles)
+        const parentLink = element.closest('a[href]');
+        if (parentLink && parentLink.href && parentLink.href !== window.location.href) {
+          // This time element is inside a link to a different page
+          return;
+        }
+        
         // Skip if element is in sidebar, recommended, or navigation areas
         if (this.isInExcludedArea(element)) {
           return;
@@ -252,12 +259,20 @@
         
         // Check data attributes (used by BBC and other sites)
         if (dataTestId.includes('promo') || dataTestId.includes('card') || 
-            dataTestId.includes('list') || dataTestId.includes('related')) {
+            dataTestId.includes('list') || dataTestId.includes('related') ||
+            dataTestId.includes('teaser') || dataTestId.includes('link')) {
           return true;
         }
         
         if (dataComponent.includes('promo') || dataComponent.includes('card') ||
-            dataComponent.includes('related') || dataComponent.includes('recommendations')) {
+            dataComponent.includes('related') || dataComponent.includes('recommendations') ||
+            dataComponent.includes('teaser') || dataComponent.includes('link')) {
+          return true;
+        }
+        
+        // Check for link/anchor parent (dates inside links are often to other articles)
+        if (current.tagName === 'A' && current.href && current.href !== window.location.href) {
+          // This is a link to a different page - likely a related article
           return true;
         }
         
