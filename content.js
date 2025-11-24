@@ -172,19 +172,38 @@
       const results = [];
       const timeElements = document.querySelectorAll('time[datetime]');
       let firstMainArticleDate = null;
+      
+      // Check if we already have an Open Graph date - if so, be more conservative with time elements
+      const hasOpenGraphDate = document.querySelector('meta[property="og:published_time"], meta[property="og:article:published_time"], meta[property="og:datePublished"]');
+      const shouldBeConservative = !!hasOpenGraphDate;
 
       timeElements.forEach(element => {
         // Skip if element is inside a link to another page (related articles)
         const parentLink = element.closest('a[href]');
-        if (parentLink && parentLink.href && parentLink.href !== window.location.href) {
-          // This time element is inside a link to a different page
-          return;
+        if (parentLink && parentLink.href) {
+          try {
+            const linkUrl = new URL(parentLink.href, window.location.href);
+            const currentUrl = new URL(window.location.href);
+            if (linkUrl.pathname !== currentUrl.pathname) {
+              // This time element is inside a link to a different page
+              return;
+            }
+          } catch (e) {
+            // If URL parsing fails, skip this element to be safe
+            return;
+          }
         }
         
         // Skip if element is in sidebar, recommended, or navigation areas
         if (this.isInExcludedArea(element)) {
           return;
         }
+        
+        // Additional check: if this is NOT the first time element and there are multiple
+        // time elements on the page, lower the confidence
+        const allTimeElements = document.querySelectorAll('time[datetime]');
+        const elementIndex = Array.from(allTimeElements).indexOf(element);
+        const isNotFirst = elementIndex > 0;
 
         const datetime = element.getAttribute('datetime');
         const classList = element.className.toLowerCase();
@@ -214,8 +233,19 @@
           confidence = this.CONFIDENCE.HIGH; // High for explicitly marked dates
         } else if (isInMainArticle && firstMainArticleDate === null) {
           // Only give high confidence to the FIRST date in main article
-          confidence = this.CONFIDENCE.HIGH;
+          // But if we have Open Graph, only trust if it's the first occurrence
+          if (shouldBeConservative && isNotFirst) {
+            confidence = this.CONFIDENCE.LOW;
+          } else {
+            confidence = this.CONFIDENCE.HIGH;
+          }
           firstMainArticleDate = datetime; // Mark that we found the first one
+        } else if (isNotFirst && !isInMainArticle) {
+          // If this is not the first time element and not in main article, lower confidence
+          confidence = this.CONFIDENCE.LOW;
+        } else if (shouldBeConservative && isNotFirst) {
+          // If Open Graph exists and this is not the first time element, be skeptical
+          confidence = this.CONFIDENCE.LOW;
         }
 
         results.push({
