@@ -38,15 +38,20 @@ This ensures you get the publication date of the actual article you're reading, 
 
 ## Installation
 
-### Temporary Installation (for testing)
-1. Open Firefox and navigate to `about:debugging`
-2. Click "This Firefox" in the left sidebar
-3. Click "Load Temporary Add-on"
-4. Navigate to the `date-detective-addon` folder and select `manifest.json`
-5. The addon is now installed temporarily
+### Option 1: Direct Installation (Recommended)
+**One-click install**: [Download publishing_date_finder-1.2.5.xpi](https://github.com/Popravljam/publishing-date-finder/releases/download/v1.2.4/publishing_date_finder-1.2.5.xpi)
 
-### Permanent Installation
-Download from the Firefox Add-ons store (coming soon) or install the `.xpi` package.
+Firefox will prompt to install. Click "Add" to install permanently.
+
+### Option 2: Firefox Add-ons Store
+Coming soon to [addons.mozilla.org](https://addons.mozilla.org/)
+
+### Option 3: Manual Installation (Development)
+1. Download and extract the [latest release](https://github.com/Popravljam/publishing-date-finder/releases/latest)
+2. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
+3. Click "Load Temporary Add-on"
+4. Select `manifest.json` from the extracted folder
+5. Note: Temporary installations are removed when Firefox restarts
 
 ## Usage
 
