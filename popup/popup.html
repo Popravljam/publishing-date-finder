@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Date Detective</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔍 Publishing Date Finder</h1>
+      <span class="version-badge">v1.0 beta</span>
+    </header>
+
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Detecting dates...</p>
+    </div>
+
+    <div id="results" class="results hidden">
+      <div id="dateList"></div>
+      
+      <div id="waybackSection" class="wayback-section hidden">
+        <div class="section-header">
+          <h3>🕰️ Wayback Machine</h3>
+          <button id="checkWayback" class="btn-wayback">Check Archive</button>
+        </div>
+        <div id="waybackResult" class="wayback-result hidden"></div>
+      </div>
+
+      <div id="noResults" class="no-results hidden">
+        <p>❌ No dates found on this page</p>
+        <p class="hint">Try checking the Wayback Machine for archived data</p>
+      </div>
+    </div>
+
+    <footer>
+      <div class="legend">
+        <div class="legend-item">
+          <span class="dot confidence-high"></span>
+          <span>High confidence</span>
+        </div>
+        <div class="legend-item">
+          <span class="dot confidence-medium"></span>
+          <span>Medium confidence</span>
+        </div>
+        <div class="legend-item">
+          <span class="dot confidence-low"></span>
+          <span>Low confidence</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
