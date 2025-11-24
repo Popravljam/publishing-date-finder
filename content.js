@@ -444,21 +444,37 @@
         // "15 January 2024"
         /(?:published|posted|created|written)(?:\s+on)?[\s:]+(\d{1,2}\s+[A-Za-z]+\s+\d{4})/i,
         // ISO format
-        /(?:published|posted|created|written)(?:\s+on)?[\s:]+(\d{4}-\d{2}-\d{2})/i
+        /(?:published|posted|created|written)(?:\s+on)?[\s:]+(\d{4}-\d{2}-\d{2})/i,
+        // Standalone "November 9, 2025" or "9 November 2025" (without keyword)
+        /\b([A-Z][a-z]+\s+\d{1,2},?\s+\d{4})\b/,
+        /\b(\d{1,2}\s+[A-Z][a-z]+\s+\d{4})\b/,
+        // MM/DD/YYYY format
+        /\b(\d{1,2}\/\d{1,2}\/\d{4})\b/
       ];
 
       // Only check first 5000 characters to avoid performance issues
       const textToSearch = bodyText.substring(0, 5000);
 
-      for (const pattern of datePatterns) {
+      for (let i = 0; i < datePatterns.length; i++) {
+        const pattern = datePatterns[i];
         const match = textToSearch.match(pattern);
         if (match) {
           const isUpdate = /updated|modified|edited/i.test(match[0]);
+          const hasKeyword = /published|posted|created|written|updated|modified|edited/i.test(match[0]);
+          
+          // Lower confidence for standalone dates without keywords
+          let confidence = hasKeyword ? this.CONFIDENCE.MEDIUM : this.CONFIDENCE.LOW;
+          
+          // If it's in the first 4 patterns (with keywords), keep MEDIUM
+          if (i < 4) {
+            confidence = this.CONFIDENCE.MEDIUM;
+          }
+          
           results.push({
             date: match[1],
             type: isUpdate ? 'Modified' : 'Published',
             source: 'Text content heuristics',
-            confidence: this.CONFIDENCE.MEDIUM
+            confidence: confidence
           });
           break; // Only take first match to avoid duplicates
         }
