@@ -31,7 +31,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       noResultsEl.classList.remove('hidden');
       waybackSectionEl.classList.remove('hidden');
     } else {
-      dateListEl.innerHTML = dates.map(createDateElement).join('');
+      // Clear existing content
+      dateListEl.textContent = '';
+      // Safely append each date element
+      dates.forEach(dateInfo => {
+        dateListEl.appendChild(createDateElement(dateInfo));
+      });
       waybackSectionEl.classList.remove('hidden');
     }
   }
@@ -41,16 +46,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     const formattedDate = formatDate(date);
     const relativeTime = getRelativeTime(date);
 
-    return `
-      <div class="date-item confidence-${dateInfo.confidence}">
-        <div class="date-header">
-          <span class="date-type">${dateInfo.type}</span>
-          <span class="confidence-badge ${dateInfo.confidence}">${dateInfo.confidence}</span>
-        </div>
-        <div class="date-value">${formattedDate}</div>
-        <div class="date-source">${relativeTime} • ${dateInfo.source}</div>
-      </div>
-    `;
+    const dateItem = document.createElement('div');
+    dateItem.className = `date-item confidence-${dateInfo.confidence}`;
+
+    const dateHeader = document.createElement('div');
+    dateHeader.className = 'date-header';
+
+    const dateType = document.createElement('span');
+    dateType.className = 'date-type';
+    dateType.textContent = dateInfo.type;
+
+    const confidenceBadge = document.createElement('span');
+    confidenceBadge.className = `confidence-badge ${dateInfo.confidence}`;
+    confidenceBadge.textContent = dateInfo.confidence;
+
+    dateHeader.appendChild(dateType);
+    dateHeader.appendChild(confidenceBadge);
+
+    const dateValue = document.createElement('div');
+    dateValue.className = 'date-value';
+    dateValue.textContent = formattedDate;
+
+    const dateSource = document.createElement('div');
+    dateSource.className = 'date-source';
+    dateSource.textContent = `${relativeTime} • ${dateInfo.source}`;
+
+    dateItem.appendChild(dateHeader);
+    dateItem.appendChild(dateValue);
+    dateItem.appendChild(dateSource);
+
+    return dateItem;
   }
 
   function formatDate(date) {
@@ -112,27 +137,59 @@ document.addEventListener('DOMContentLoaded', async () => {
     const formattedDate = formatDate(date);
     const relativeTime = getRelativeTime(date);
 
-    waybackResultEl.innerHTML = `
-      <div class="date-header">
-        <span class="date-type">First Archive</span>
-        <span class="confidence-badge low">estimated</span>
-      </div>
-      <div class="wayback-date">${formattedDate}</div>
-      <div class="wayback-info">${relativeTime} • Wayback Machine snapshot</div>
-      <a href="${data.url}" target="_blank" class="wayback-link">View archived version →</a>
-    `;
+    waybackResultEl.textContent = '';
+
+    const dateHeader = document.createElement('div');
+    dateHeader.className = 'date-header';
+
+    const dateType = document.createElement('span');
+    dateType.className = 'date-type';
+    dateType.textContent = 'First Archive';
+
+    const confidenceBadge = document.createElement('span');
+    confidenceBadge.className = 'confidence-badge low';
+    confidenceBadge.textContent = 'estimated';
+
+    dateHeader.appendChild(dateType);
+    dateHeader.appendChild(confidenceBadge);
+
+    const waybackDate = document.createElement('div');
+    waybackDate.className = 'wayback-date';
+    waybackDate.textContent = formattedDate;
+
+    const waybackInfo = document.createElement('div');
+    waybackInfo.className = 'wayback-info';
+    waybackInfo.textContent = `${relativeTime} • Wayback Machine snapshot`;
+
+    const waybackLink = document.createElement('a');
+    waybackLink.href = data.url;
+    waybackLink.target = '_blank';
+    waybackLink.className = 'wayback-link';
+    waybackLink.textContent = 'View archived version →';
+
+    waybackResultEl.appendChild(dateHeader);
+    waybackResultEl.appendChild(waybackDate);
+    waybackResultEl.appendChild(waybackInfo);
+    waybackResultEl.appendChild(waybackLink);
     waybackResultEl.classList.remove('hidden');
   }
 
   function displayWaybackError(message) {
-    waybackResultEl.innerHTML = `<div class="wayback-error">${message}</div>`;
+    waybackResultEl.textContent = '';
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'wayback-error';
+    errorDiv.textContent = message;
+    waybackResultEl.appendChild(errorDiv);
     waybackResultEl.classList.remove('hidden');
   }
 
   function showError(message) {
     loadingEl.classList.add('hidden');
     resultsEl.classList.remove('hidden');
-    noResultsEl.innerHTML = `<p>⚠️ ${message}</p>`;
+    noResultsEl.textContent = '';
+    const errorP = document.createElement('p');
+    errorP.textContent = `⚠️ ${message}`;
+    noResultsEl.appendChild(errorP);
     noResultsEl.classList.remove('hidden');
   }
 });
