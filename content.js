@@ -437,19 +437,32 @@
       
       // Look for common date patterns in text
       const datePatterns = [
+        // With keywords - MEDIUM confidence
         // "Published: January 15, 2024" or "Published on January 15, 2024"
-        /(?:published|posted|created|written)(?:\s+on)?[\s:]+([A-Za-z]+\s+\d{1,2},?\s+\d{4})/i,
+        /(?:published|posted|created|written|veröffentlicht|publié|pubblicato)(?:\s+on|\s+am)?[\s:]+([A-Za-z]+\s+\d{1,2},?\s+\d{4})/i,
         // "Updated: January 15, 2024"
-        /(?:updated|modified|edited)(?:\s+on)?[\s:]+([A-Za-z]+\s+\d{1,2},?\s+\d{4})/i,
-        // "15 January 2024"
-        /(?:published|posted|created|written)(?:\s+on)?[\s:]+(\d{1,2}\s+[A-Za-z]+\s+\d{4})/i,
-        // ISO format
-        /(?:published|posted|created|written)(?:\s+on)?[\s:]+(\d{4}-\d{2}-\d{2})/i,
-        // Standalone "November 9, 2025" or "9 November 2025" (without keyword)
+        /(?:updated|modified|edited|aktualisiert|modifié|aggiornato)(?:\s+on|\s+am)?[\s:]+([A-Za-z]+\s+\d{1,2},?\s+\d{4})/i,
+        // "15 January 2024" with keyword
+        /(?:published|posted|created|written|veröffentlicht|publié)(?:\s+on|\s+am)?[\s:]+(\d{1,2}\s+[A-Za-z]+\s+\d{4})/i,
+        // ISO format with keyword
+        /(?:published|posted|created|written|veröffentlicht|publié)(?:\s+on|\s+am)?[\s:]+(\d{4}-\d{2}-\d{2})/i,
+        // DD.MM.YYYY with keyword (German/European)
+        /(?:published|posted|created|written|veröffentlicht|publié)(?:\s+on|\s+am)?[\s:]+(\d{1,2}\.\d{1,2}\.\d{4})/i,
+        // MM/DD/YYYY with keyword
+        /(?:published|posted|created|written|veröffentlicht|publié)(?:\s+on|\s+am)?[\s:]+(\d{1,2}\/\d{1,2}\/\d{4})/i,
+        
+        // Standalone formats - LOW confidence
+        // "January 15, 2024" or "15 January 2024"
         /\b([A-Z][a-z]+\s+\d{1,2},?\s+\d{4})\b/,
         /\b(\d{1,2}\s+[A-Z][a-z]+\s+\d{4})\b/,
-        // MM/DD/YYYY format
-        /\b(\d{1,2}\/\d{1,2}\/\d{4})\b/
+        // ISO format: 2024-01-15
+        /\b(\d{4}-\d{2}-\d{2})\b/,
+        // European: DD.MM.YYYY
+        /\b(\d{1,2}\.\d{1,2}\.\d{4})\b/,
+        // US: MM/DD/YYYY
+        /\b(\d{1,2}\/\d{1,2}\/\d{4})\b/,
+        // DD-MM-YYYY or DD/MM/YYYY
+        /\b(\d{1,2}[-\/]\d{1,2}[-\/]\d{4})\b/
       ];
 
       // Only check first 5000 characters to avoid performance issues
@@ -459,16 +472,12 @@
         const pattern = datePatterns[i];
         const match = textToSearch.match(pattern);
         if (match) {
-          const isUpdate = /updated|modified|edited/i.test(match[0]);
-          const hasKeyword = /published|posted|created|written|updated|modified|edited/i.test(match[0]);
+          const isUpdate = /updated|modified|edited|aktualisiert|modifié|aggiornato/i.test(match[0]);
+          const hasKeyword = /published|posted|created|written|updated|modified|edited|veröffentlicht|publié|pubblicato|aktualisiert/i.test(match[0]);
           
-          // Lower confidence for standalone dates without keywords
-          let confidence = hasKeyword ? this.CONFIDENCE.MEDIUM : this.CONFIDENCE.LOW;
-          
-          // If it's in the first 4 patterns (with keywords), keep MEDIUM
-          if (i < 4) {
-            confidence = this.CONFIDENCE.MEDIUM;
-          }
+          // First 6 patterns have keywords = MEDIUM confidence
+          // Remaining patterns are standalone = LOW confidence
+          let confidence = i < 6 ? this.CONFIDENCE.MEDIUM : this.CONFIDENCE.LOW;
           
           results.push({
             date: match[1],
