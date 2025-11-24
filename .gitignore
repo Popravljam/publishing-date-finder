@@ -32,6 +32,8 @@ Temporary Items
 # Build/Distribution
 *.zip
 web-ext-artifacts/
+build-chrome/
+temp-signing/
 dist/
 
 # Logs
