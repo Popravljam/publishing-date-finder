@@ -5,6 +5,22 @@ All notable changes to Publishing Date Finder will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.3] - 2025-11-24 (Beta)
+
+### Added
+- **Main article content detection**: Prioritizes dates within `<article>`, `<main>` tags and semantic content areas
+- Smart confidence scoring: Only the first date in main article gets HIGH confidence
+- Increased DOM traversal depth from 10 to 15 levels for better detection
+
+### Improved
+- **Selective high confidence**: Only first main article date or explicitly marked "published" dates get green badge
+- Subsequent dates in same article get yellow (medium) confidence to prevent false positives
+- Better accuracy on BBC Serbian and other complex news sites with multiple article dates
+
+### Fixed
+- Prevents multiple incorrect dates from showing high confidence
+- Correctly identifies and prioritizes main article publication dates over sidebar content
+
 ## [1.2.1] - 2025-11-24
 
 ### Improved
@@ -68,6 +84,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Privacy-focused design with no data collection
 - Custom logo with magnifying glass and clock icon
 
+[1.2.3]: https://github.com/Popravljam/publishing-date-finder/compare/v1.2.1...v1.2.3
 [1.2.1]: https://github.com/Popravljam/publishing-date-finder/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/Popravljam/publishing-date-finder/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/Popravljam/publishing-date-finder/compare/v1.0.0...v1.1.0
