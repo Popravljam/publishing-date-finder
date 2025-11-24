@@ -217,16 +217,46 @@
         const id = current.id ? current.id.toLowerCase() : '';
         const role = current.getAttribute('role') || '';
         
+        // Check if this container has multiple time/date elements (likely an article list)
+        if (depth > 0 && depth < 5) {
+          const timeElements = current.querySelectorAll('time[datetime], [itemprop*="date"]');
+          if (timeElements.length > 3) {
+            // This container has multiple dates, likely a list of articles
+            return true;
+          }
+        }
+        
         // Common patterns for excluded areas
         const excludedPatterns = [
-          'sidebar', 'side-bar', 'rail',
-          'recommended', 'related', 'suggestion',
-          'navigation', 'nav', 'menu',
-          'footer', 'header',
+          // Sidebar variations
+          'sidebar', 'side-bar', 'side_bar', 'rail', 'side-rail',
+          // Recommended/Related content
+          'recommended', 'related', 'suggestion', 'suggest',
+          'you-may-like', 'you-might-like', 'read-more', 'read-next',
+          'more-from', 'also-read', 'continue-reading',
+          // Navigation
+          'navigation', 'nav', 'menu', 'navbar', 'nav-bar',
+          // Header/Footer
+          'footer', 'header', 'site-header', 'site-footer',
+          // Widgets
           'widget', 'aside',
-          'trending', 'popular', 'latest',
-          'more-stories', 'other-articles',
-          'comment', 'discussion'
+          // Trending/Popular
+          'trending', 'popular', 'latest', 'recent',
+          'most-read', 'most-viewed', 'top-stories',
+          // More stories/articles
+          'more-stories', 'other-articles', 'more-articles',
+          'story-list', 'article-list', 'post-list',
+          // Comments
+          'comment', 'discussion', 'disqus',
+          // Promo/Ad areas
+          'promo', 'promotion', 'ad', 'advertisement',
+          // Social
+          'social', 'share', 'follow',
+          // Secondary content
+          'secondary', 'complementary', 'auxiliary',
+          // Lists and grids of other content
+          'grid', 'list', 'carousel', 'slider',
+          'tile', 'card-list', 'feed'
         ];
 
         // Check if any excluded pattern matches
