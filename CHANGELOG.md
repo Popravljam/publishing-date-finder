@@ -5,6 +5,26 @@ All notable changes to Publishing Date Finder will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2025-11-24 (Beta)
+
+### Added
+- **International date format support**: DD.MM.YYYY, DD/MM/YYYY, DD-MM-YYYY, ISO 8601
+- **Multi-language keywords**: German (veröffentlicht, aktualisiert), French (publié, modifié), Italian (pubblicato, aggiornato)
+- **Enhanced URL structure analysis**: Compact formats (YYYYMMDD), article-YYYY-MM-DD patterns
+- **Position-based confidence**: Bottom 20% of page gets LOW confidence, not filtered out
+- **German site patterns**: weiter, mehr, lesetipp, empfehlung for German news sites
+
+### Improved
+- URL date extraction validates year range (1990-2100)
+- Better handling of standalone dates without keywords
+- More flexible URL pattern matching with delimiters
+- Comprehensive date format detection for international sites
+
+### Fixed
+- DW.com and other sites with standalone date formats now detected
+- Bundeswehr and German news sites with European date formats
+- Bottom-page suggestions show with low confidence instead of being hidden
+
 ## [1.2.3] - 2025-11-24 (Beta)
 
 ### Added

@@ -402,28 +402,40 @@
       const results = [];
       const url = window.location.href;
       
-      // Pattern: /YYYY/MM/DD/ or /YYYY/MM/ or /YYYY-MM-DD/
+      // Check URL structure patterns
       const urlDatePatterns = [
-        /\/(\d{4})\/(\d{2})\/(\d{2})\//,
-        /\/(\d{4})\/(\d{2})\//,
-        /\/(\d{4})-(\d{2})-(\d{2})\//,
-        /\/(\d{4})-(\d{2})\//
+        // /YYYY/MM/DD/ format
+        { pattern: /\/(\d{4})\/(\d{2})\/(\d{2})[\/\?#-]/, hasDay: true },
+        // /YYYY/MM/ format
+        { pattern: /\/(\d{4})\/(\d{2})[\/\?#-]/, hasDay: false },
+        // /YYYY-MM-DD format
+        { pattern: /\/(\d{4})-(\d{2})-(\d{2})[\/\?#-]/, hasDay: true },
+        // /YYYY-MM format
+        { pattern: /\/(\d{4})-(\d{2})[\/\?#-]/, hasDay: false },
+        // /YYYYMMDD format (compact)
+        { pattern: /\/(\d{4})(\d{2})(\d{2})[\/\?#-]/, hasDay: true },
+        // article-YYYY-MM-DD or similar
+        { pattern: /[-_](\d{4})[-_](\d{2})[-_](\d{2})/, hasDay: true }
       ];
 
-      for (const pattern of urlDatePatterns) {
+      for (const { pattern, hasDay } of urlDatePatterns) {
         const match = url.match(pattern);
         if (match) {
           const year = match[1];
           const month = match[2];
-          const day = match[3] || '01';
+          const day = hasDay && match[3] ? match[3] : '01';
           
-          results.push({
-            date: `${year}-${month}-${day}`,
-            type: 'Published',
-            source: 'URL pattern',
-            confidence: this.CONFIDENCE.MEDIUM
-          });
-          break;
+          // Validate year is reasonable (between 1990 and 2100)
+          const yearNum = parseInt(year);
+          if (yearNum >= 1990 && yearNum <= 2100) {
+            results.push({
+              date: `${year}-${month}-${day}`,
+              type: 'Published',
+              source: 'URL structure',
+              confidence: this.CONFIDENCE.MEDIUM
+            });
+            break;
+          }
         }
       }
 
