@@ -141,6 +141,11 @@
       const dateElements = document.querySelectorAll('[itemprop="datePublished"], [itemprop="dateModified"], [itemprop="dateCreated"]');
 
       dateElements.forEach(element => {
+        // Skip if element is in sidebar or recommended areas
+        if (this.isInExcludedArea(element)) {
+          return;
+        }
+
         const itemprop = element.getAttribute('itemprop');
         const date = element.getAttribute('datetime') || element.getAttribute('content') || element.textContent.trim();
         
@@ -167,6 +172,11 @@
       const timeElements = document.querySelectorAll('time[datetime]');
 
       timeElements.forEach(element => {
+        // Skip if element is in sidebar, recommended, or navigation areas
+        if (this.isInExcludedArea(element)) {
+          return;
+        }
+
         const datetime = element.getAttribute('datetime');
         const classList = element.className.toLowerCase();
         const parentText = element.parentElement?.textContent.toLowerCase() || '';
@@ -193,6 +203,51 @@
       });
 
       return results;
+    },
+
+    // Helper: Check if element is in sidebar, recommended, or other excluded areas
+    isInExcludedArea(element) {
+      // Check the element and its parents for common sidebar/recommendation indicators
+      let current = element;
+      let depth = 0;
+      const maxDepth = 10; // Don't traverse too far up
+
+      while (current && current !== document.body && depth < maxDepth) {
+        const className = current.className ? current.className.toLowerCase() : '';
+        const id = current.id ? current.id.toLowerCase() : '';
+        const role = current.getAttribute('role') || '';
+        
+        // Common patterns for excluded areas
+        const excludedPatterns = [
+          'sidebar', 'side-bar', 'rail',
+          'recommended', 'related', 'suggestion',
+          'navigation', 'nav', 'menu',
+          'footer', 'header',
+          'widget', 'aside',
+          'trending', 'popular', 'latest',
+          'more-stories', 'other-articles',
+          'comment', 'discussion'
+        ];
+
+        // Check if any excluded pattern matches
+        const hasExcludedPattern = excludedPatterns.some(pattern => 
+          className.includes(pattern) || id.includes(pattern)
+        );
+
+        if (hasExcludedPattern) {
+          return true;
+        }
+
+        // Check for <aside> or complementary role
+        if (current.tagName === 'ASIDE' || role === 'complementary' || role === 'navigation') {
+          return true;
+        }
+
+        current = current.parentElement;
+        depth++;
+      }
+
+      return false;
     },
 
     // Method 6: URL pattern analysis
