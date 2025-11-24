@@ -5,14 +5,28 @@
 
 A powerful Firefox extension that detects publication dates from web pages using multiple detection methods with confidence indicators. Perfect for journalists, researchers, and anyone who needs to verify when content was published.
 
+## 🆕 What's New in v1.2.0
+
+**Smart Content Filtering** - The extension now intelligently filters out dates from sidebars, recommended articles, and navigation. This significantly improves accuracy on news sites and blogs with multiple dates on the same page. [See full changelog](CHANGELOG.md)
+
 ## Features
+
+### Smart Content Filtering 🎯
+The extension intelligently focuses on the main article content, automatically filtering out dates from:
+- Sidebars and related articles
+- Navigation menus and headers
+- Recommended/trending sections
+- Comments and discussions
+- Footers and widgets
+
+This ensures you get the publication date of the actual article you're reading, not from surrounding content.
 
 ### Detection Methods
 1. **Open Graph Metadata** - `og:published_time`, `og:article:published_time`
 2. **JSON-LD Structured Data** - Schema.org structured data
 3. **HTML Meta Tags** - Dublin Core, custom meta tags
-4. **Microdata** - `itemprop` attributes
-5. **HTML Time Elements** - `<time>` tags with datetime attributes
+4. **Microdata** - `itemprop` attributes (with smart filtering)
+5. **HTML Time Elements** - `<time>` tags with datetime attributes (with smart filtering)
 6. **URL Pattern Analysis** - Dates embedded in URLs
 7. **Text Heuristics** - Pattern matching in page content
 8. **Wayback Machine** - Archive.org fallback for undated pages
