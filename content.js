@@ -223,28 +223,26 @@
           confidence = this.CONFIDENCE.MEDIUM;
         }
 
+        // If Open Graph metadata exists, be very conservative with time elements
+        if (shouldBeConservative && isNotFirst) {
+          // If we have OG and this isn't the first time element, it's probably embedded content
+          confidence = this.CONFIDENCE.LOW;
+        }
         // Try to determine what type of date this is
-        if (classList.includes('updated') || classList.includes('modified') || 
+        else if (classList.includes('updated') || classList.includes('modified') || 
             parentText.includes('updated') || parentText.includes('modified')) {
           type = 'Modified';
+          confidence = this.CONFIDENCE.MEDIUM;
         } else if (classList.includes('published') || classList.includes('posted') ||
                    parentText.includes('published') || parentText.includes('posted')) {
           type = 'Published';
           confidence = this.CONFIDENCE.HIGH; // High for explicitly marked dates
         } else if (isInMainArticle && firstMainArticleDate === null) {
           // Only give high confidence to the FIRST date in main article
-          // But if we have Open Graph, only trust if it's the first occurrence
-          if (shouldBeConservative && isNotFirst) {
-            confidence = this.CONFIDENCE.LOW;
-          } else {
-            confidence = this.CONFIDENCE.HIGH;
-          }
+          confidence = this.CONFIDENCE.HIGH;
           firstMainArticleDate = datetime; // Mark that we found the first one
         } else if (isNotFirst && !isInMainArticle) {
           // If this is not the first time element and not in main article, lower confidence
-          confidence = this.CONFIDENCE.LOW;
-        } else if (shouldBeConservative && isNotFirst) {
-          // If Open Graph exists and this is not the first time element, be skeptical
           confidence = this.CONFIDENCE.LOW;
         }
 
