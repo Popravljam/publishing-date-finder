@@ -171,6 +171,7 @@
     extractTimeElements() {
       const results = [];
       const timeElements = document.querySelectorAll('time[datetime]');
+      let firstMainArticleDate = null;
 
       timeElements.forEach(element => {
         // Skip if element is in sidebar, recommended, or navigation areas
@@ -186,11 +187,6 @@
         let type = 'Published';
         let confidence = this.CONFIDENCE.MEDIUM;
 
-        // Higher confidence if in main article area
-        if (isInMainArticle) {
-          confidence = this.CONFIDENCE.HIGH;
-        }
-
         // Try to determine what type of date this is
         if (classList.includes('updated') || classList.includes('modified') || 
             parentText.includes('updated') || parentText.includes('modified')) {
@@ -198,7 +194,11 @@
         } else if (classList.includes('published') || classList.includes('posted') ||
                    parentText.includes('published') || parentText.includes('posted')) {
           type = 'Published';
-          confidence = this.CONFIDENCE.HIGH; // Always high for explicitly marked dates
+          confidence = this.CONFIDENCE.HIGH; // High for explicitly marked dates
+        } else if (isInMainArticle && firstMainArticleDate === null) {
+          // Only give high confidence to the FIRST date in main article
+          confidence = this.CONFIDENCE.HIGH;
+          firstMainArticleDate = datetime; // Mark that we found the first one
         }
 
         results.push({
