@@ -2,12 +2,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Firefox Add-on](https://img.shields.io/badge/Firefox-Add--on-orange.svg)](https://addons.mozilla.org/)
+[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue.svg)](https://chrome.google.com/webstore)
 
-A powerful Firefox extension that detects publication dates from web pages using multiple detection methods with confidence indicators. Perfect for journalists, researchers, and anyone who needs to verify when content was published.
+A powerful cross-browser extension that detects publication dates from web pages using multiple detection methods with confidence indicators. Available for **Firefox, Chrome, Edge, Brave, Opera**, and all Chromium-based browsers. Perfect for journalists, researchers, and anyone who needs to verify when content was published.
 
-## 🆕 What's New in v1.2.4
+## 🆕 What's New in v1.2.5
 
-**International Support & Smart Source Prioritization** - Major stable release! Supports 10+ languages and multiple date formats. Smart Open Graph prioritization eliminates duplicate dates from related articles. Position-based confidence system. Thoroughly tested on BBC, DW, Bundeswehr, and international sites. [See full changelog](CHANGELOG.md)
+**Cross-Browser Support!** - Now available for both Firefox and Chrome/Chromium browsers! Full Manifest V3 implementation for Chrome, self-hosted signed packages, and comprehensive documentation for both platforms. All the same powerful features across all browsers. [See full changelog](CHANGELOG.md)
 
 ## Features
 
@@ -93,18 +94,29 @@ Coming soon to Chrome Web Store
 ### Project Structure
 ```
 date-detective-addon/
-├── manifest.json          # Firefox addon manifest
-├── content.js            # Content script (runs on web pages)
-├── background.js         # Background script (handles API calls)
+├── manifest.json              # Firefox manifest (Manifest v2)
+├── manifest-chrome.json       # Chrome manifest (Manifest v3)
+├── content.js                 # Content script (shared, browser-agnostic)
+├── background.js              # Firefox background script (browser.*)
+├── background-chrome.js       # Chrome service worker (chrome.*)
 ├── popup/
-│   ├── popup.html       # Popup UI
-│   ├── popup.css        # Popup styles
-│   └── popup.js         # Popup logic
-├── icons/
-│   ├── icon-48.png      # 48x48 icon
-│   └── icon-96.png      # 96x96 icon
-└── README.md            # This file
+│   ├── popup.html            # Popup UI (shared)
+│   ├── popup.css             # Popup styles (shared)
+│   └── popup.js              # Firefox popup script (browser.*)
+├── popup-chrome.js            # Chrome popup script (chrome.*)
+├── icons/                     # Extension icons (shared)
+├── build-chrome.sh            # Chrome build script
+├── CHROME_SUBMISSION.md       # Chrome Web Store guide
+├── BROWSER_GUIDE.md           # Cross-browser compatibility guide
+└── README.md                  # This file
 ```
+
+**Shared vs Browser-Specific Files:**
+- **Shared (95%)**: `content.js`, UI files, icons, documentation
+- **Firefox-specific**: `manifest.json`, `background.js`, `popup/popup.js`
+- **Chrome-specific**: `manifest-chrome.json`, `background-chrome.js`, `popup-chrome.js`
+
+See [BROWSER_GUIDE.md](BROWSER_GUIDE.md) for technical details.
 
 ### Testing
 Test the addon on various websites:
@@ -120,16 +132,28 @@ Test the addon on various websites:
 3. Check the background script logs for Wayback Machine API issues
 4. Use the browser's network inspector to see API calls
 
-## Creating a Distribution Package
+## Creating Distribution Packages
 
-To create a signed `.xpi` file for distribution:
-
+### Firefox Package (Signed .xpi)
 ```bash
-cd date-detective-addon
-zip -r -FS ../date-detective.xpi * --exclude '*.git*' --exclude '*README.md'
+# Sign with Mozilla API credentials
+web-ext sign \
+  --api-key="YOUR_KEY" \
+  --api-secret="YOUR_SECRET" \
+  --channel=unlisted
+
+# Output: web-ext-artifacts/publishing_date_finder-VERSION.xpi
 ```
 
-Then submit to Mozilla Add-ons for signing.
+### Chrome Package (.zip)
+```bash
+# Build clean Chrome package
+./build-chrome.sh
+
+# Output: publishing-date-finder-chrome-VERSION.zip
+```
+
+See [CHROME_SUBMISSION.md](CHROME_SUBMISSION.md) for Chrome Web Store submission guide.
 
 ## Technical Details
 
@@ -138,23 +162,51 @@ Then submit to Mozilla Add-ons for signing.
 - `https://archive.org/*` - Access to Wayback Machine API
 
 ### Browser Compatibility
-- Firefox 57+ (Manifest v2)
-- Can be adapted for Chrome/Edge with minor modifications
+
+| Browser | Support | Manifest | Package Type |
+|---------|---------|----------|-------------|
+| Firefox | ✅ 57+ | v2 | Signed .xpi |
+| Chrome | ✅ 88+ | v3 | .zip |
+| Edge | ✅ 88+ | v3 | .zip |
+| Brave | ✅ Latest | v3 | .zip |
+| Opera | ✅ Latest | v3 | .zip |
+
+**Technical differences**: See [BROWSER_GUIDE.md](BROWSER_GUIDE.md)
+
+### Multi-Language Support
+- **10 languages**: English, Spanish, French, German, Portuguese, Russian, Japanese, Hindi, Arabic, Mandarin
+- **Date formats**: DD.MM.YYYY, MM/DD/YYYY, DD-MM-YYYY, ISO 8601, YYYYMMDD
+- **Unicode support**: CJK, Devanagari, Arabic, Cyrillic scripts
 
 ### API Usage
 - **Wayback Machine API**: `https://archive.org/wayback/available`
   - Free, no rate limits for reasonable use
   - Returns closest archived snapshot
 
+## Publishing to Stores
+
+### Firefox Add-ons
+- **Store**: https://addons.mozilla.org/developers/
+- **Review**: Minutes to hours (automated + manual)
+- **Cost**: Free
+- **Status**: Ready for submission (signed package available)
+
+### Chrome Web Store
+- **Store**: https://chrome.google.com/webstore/devconsole
+- **Review**: 1-3 business days
+- **Cost**: $5 one-time developer fee
+- **Guide**: See [CHROME_SUBMISSION.md](CHROME_SUBMISSION.md)
+
 ## Future Enhancements
 
 Possible improvements:
-- Support for more languages and date formats
+- Additional language support
 - Machine learning for better heuristic detection
-- Export dates to various formats
+- Export dates to various formats (JSON, CSV)
 - Historical view of multiple archived dates
 - Integration with other archival services
 - User preference for date format display
+- Automatic updates via update manifest
 
 ## Privacy
 

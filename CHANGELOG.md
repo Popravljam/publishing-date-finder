@@ -5,6 +5,33 @@ All notable changes to Publishing Date Finder will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.5] - 2025-11-24
+
+### Added
+- **Chrome/Chromium support**: Full compatibility with Chrome, Edge, Brave, Opera, and all Chromium-based browsers
+- **Manifest V3 implementation**: Chrome-compatible version with modern service worker architecture
+- **Cross-browser build system**: Automated build scripts for both Firefox and Chrome distributions
+- **Comprehensive browser documentation**: Added CHROME_SUBMISSION.md and BROWSER_GUIDE.md
+- **Self-hosting support**: Signed Firefox .xpi for direct installation and Chrome package for manual loading
+
+### Changed
+- Project now supports both Firefox (Manifest V2) and Chrome (Manifest V3) from single codebase
+- Browser-specific API wrappers (`browser.*` for Firefox, `chrome.*` for Chrome)
+- Updated README with installation instructions for all supported browsers
+- Enhanced .gitignore to exclude build artifacts
+
+### Technical
+- Created `manifest-chrome.json` with Manifest V3 structure
+- Implemented `background-chrome.js` as service worker (replaces persistent background script)
+- Added `popup-chrome.js` with Chrome API calls
+- Build script `build-chrome.sh` generates clean Chrome Web Store package
+- Web-ext configuration excludes Chrome-specific files from Firefox builds
+
+### Distribution
+- Firefox: Self-hosted signed .xpi available on GitHub Releases (direct install, no warnings)
+- Chrome: Packaged .zip available on GitHub Releases (manual unpacked install until Web Store publication)
+- Both packages uploaded to v1.2.4 release
+
 ## [1.2.4] - 2025-11-24
 
 ### Added
@@ -125,6 +152,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Privacy-focused design with no data collection
 - Custom logo with magnifying glass and clock icon
 
+[1.2.5]: https://github.com/Popravljam/publishing-date-finder/compare/v1.2.4...v1.2.5
 [1.2.4]: https://github.com/Popravljam/publishing-date-finder/compare/v1.2.1...v1.2.4
 [1.2.3]: https://github.com/Popravljam/publishing-date-finder/compare/v1.2.0...v1.2.3
 [1.2.1]: https://github.com/Popravljam/publishing-date-finder/compare/v1.2.0...v1.2.1
