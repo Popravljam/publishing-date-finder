@@ -207,10 +207,15 @@
 
     // Helper: Check if element is in sidebar, recommended, or other excluded areas
     isInExcludedArea(element) {
+      // First check if element is inside main article container
+      if (this.isInMainArticle(element)) {
+        return false; // If it's in main article, don't exclude it
+      }
+      
       // Check the element and its parents for common sidebar/recommendation indicators
       let current = element;
       let depth = 0;
-      const maxDepth = 10; // Don't traverse too far up
+      const maxDepth = 15; // Increased to traverse further up
 
       while (current && current !== document.body && depth < maxDepth) {
         const className = current.className ? current.className.toLowerCase() : '';
@@ -291,6 +296,62 @@
 
         // Check for <aside> or complementary role
         if (current.tagName === 'ASIDE' || role === 'complementary' || role === 'navigation') {
+          return true;
+        }
+
+        current = current.parentElement;
+        depth++;
+      }
+
+      return false;
+    },
+
+    // Helper: Check if element is in main article content area
+    isInMainArticle(element) {
+      let current = element;
+      let depth = 0;
+      const maxDepth = 15;
+
+      while (current && current !== document.body && depth < maxDepth) {
+        const tagName = current.tagName;
+        const role = current.getAttribute('role') || '';
+        const className = current.className ? current.className.toLowerCase() : '';
+        const id = current.id ? current.id.toLowerCase() : '';
+        const itemType = current.getAttribute('itemtype') || '';
+
+        // Check for semantic article tags
+        if (tagName === 'ARTICLE') {
+          return true;
+        }
+
+        // Check for main content role
+        if (role === 'main' || role === 'article') {
+          return true;
+        }
+
+        // Check for <main> tag
+        if (tagName === 'MAIN') {
+          return true;
+        }
+
+        // Check for schema.org Article type
+        if (itemType.includes('Article') || itemType.includes('NewsArticle')) {
+          return true;
+        }
+
+        // Check for common main article class/id patterns
+        const mainPatterns = [
+          'article-body', 'article-content', 'article-main',
+          'post-content', 'post-body', 'entry-content',
+          'main-content', 'content-main', 'primary-content',
+          'story-body', 'story-content'
+        ];
+
+        const hasMainPattern = mainPatterns.some(pattern =>
+          className.includes(pattern) || id.includes(pattern)
+        );
+
+        if (hasMainPattern) {
           return true;
         }
 
