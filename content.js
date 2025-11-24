@@ -183,9 +183,19 @@
         const classList = element.className.toLowerCase();
         const parentText = element.parentElement?.textContent.toLowerCase() || '';
         const isInMainArticle = this.isInMainArticle(element);
+        const pagePosition = this.getPagePosition(element);
 
         let type = 'Published';
         let confidence = this.CONFIDENCE.MEDIUM;
+
+        // Adjust confidence based on page position
+        if (pagePosition > 0.8) {
+          // Bottom 20% of page - lower confidence (likely footer suggestions)
+          confidence = this.CONFIDENCE.LOW;
+        } else if (pagePosition < 0.2 && !isInMainArticle) {
+          // Top 20% but not in main article - could be header date
+          confidence = this.CONFIDENCE.MEDIUM;
+        }
 
         // Try to determine what type of date this is
         if (classList.includes('updated') || classList.includes('modified') || 
@@ -217,16 +227,6 @@
       // First check if element is inside main article container
       if (this.isInMainArticle(element)) {
         return false; // If it's in main article, don't exclude it
-      }
-      
-      // Check if element is in the bottom 20% of the page (likely footer/suggestions)
-      const elementTop = element.getBoundingClientRect().top + window.scrollY;
-      const documentHeight = document.documentElement.scrollHeight;
-      const relativePosition = elementTop / documentHeight;
-      
-      if (relativePosition > 0.8) {
-        // Element is in bottom 20% of page - likely a footer suggestion
-        return true;
       }
       
       // Check the element and its parents for common sidebar/recommendation indicators
@@ -384,6 +384,17 @@
       }
 
       return false;
+    },
+
+    // Helper: Get element's relative position on page (0-1)
+    getPagePosition(element) {
+      try {
+        const elementTop = element.getBoundingClientRect().top + window.scrollY;
+        const documentHeight = document.documentElement.scrollHeight;
+        return elementTop / documentHeight;
+      } catch (e) {
+        return 0.5; // Default to middle if error
+      }
     },
 
     // Method 6: URL pattern analysis
