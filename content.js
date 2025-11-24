@@ -219,6 +219,16 @@
         return false; // If it's in main article, don't exclude it
       }
       
+      // Check if element is in the bottom 20% of the page (likely footer/suggestions)
+      const elementTop = element.getBoundingClientRect().top + window.scrollY;
+      const documentHeight = document.documentElement.scrollHeight;
+      const relativePosition = elementTop / documentHeight;
+      
+      if (relativePosition > 0.8) {
+        // Element is in bottom 20% of page - likely a footer suggestion
+        return true;
+      }
+      
       // Check the element and its parents for common sidebar/recommendation indicators
       let current = element;
       let depth = 0;
@@ -289,7 +299,14 @@
           'article-promo', 'post-promo', 'story-card',
           'content-list', 'news-list', 'item-list',
           // "More" sections
-          'more', 'extra', 'additional', 'see-also'
+          'more', 'extra', 'additional', 'see-also',
+          // Bottom sections
+          'bottom', 'footer-content', 'page-footer',
+          'weiter', 'mehr', 'weitere', // German: more, further
+          'lesetipp', 'empfehlung', 'vorschlag', // German: reading tip, recommendation, suggestion
+          // Teaser sections
+          'teaser', 'preview', 'excerpt',
+          'article-teaser', 'story-teaser'
         ];
 
         // Check if any excluded pattern matches
