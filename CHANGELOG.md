@@ -5,6 +5,27 @@ All notable changes to Publishing Date Finder will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.4] - 2025-11-24
+
+### Added
+- **Top 10 language support**: Multi-language keyword detection for English, Spanish, French, German, Portuguese, Russian, Japanese, Hindi, Arabic, Mandarin Chinese, Italian
+- **International date formats**: DD.MM.YYYY, DD/MM/YYYY, DD-MM-YYYY, ISO 8601, YYYYMMDD compact format
+- **Enhanced URL analysis**: Detects dates in URL structure with validation (1990-2100)
+- **Position-based confidence**: Dates in bottom 20% of page get LOW confidence
+- **Open Graph prioritization**: When OG metadata exists, HTML time elements are skipped entirely
+
+### Improved
+- **Smart source prioritization**: Trusts Open Graph over HTML time elements
+- **Link filtering**: Dates inside clickable links to other pages are filtered out
+- **German site support**: Added patterns for German news sites (weiter, mehr, lesetipp)
+- **Better embedded content detection**: Filters dates from related articles within main content
+
+### Fixed
+- Bundeswehr and BBC sites no longer show duplicate dates from related articles
+- DW.com and sites with standalone date formats now detected correctly
+- Bottom-page suggestions show with appropriate low confidence
+- Related article dates embedded in main content are now properly filtered
+
 ## [1.3.0] - 2025-11-24 (Beta)
 
 ### Added
@@ -104,7 +125,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Privacy-focused design with no data collection
 - Custom logo with magnifying glass and clock icon
 
-[1.2.3]: https://github.com/Popravljam/publishing-date-finder/compare/v1.2.1...v1.2.3
+[1.2.4]: https://github.com/Popravljam/publishing-date-finder/compare/v1.2.1...v1.2.4
+[1.2.3]: https://github.com/Popravljam/publishing-date-finder/compare/v1.2.0...v1.2.3
 [1.2.1]: https://github.com/Popravljam/publishing-date-finder/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/Popravljam/publishing-date-finder/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/Popravljam/publishing-date-finder/compare/v1.0.0...v1.1.0
