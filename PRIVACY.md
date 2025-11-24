@@ -62,7 +62,7 @@ We may update this privacy policy from time to time. Any changes will be reflect
 ## Open Source
 
 This extension is open source. You can review the code at:
-https://github.com/[your-username]/publishing-date-finder
+https://github.com/Popravljam/publishing-date-finder
 
 ## Contact
 
