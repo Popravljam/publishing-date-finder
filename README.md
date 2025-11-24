@@ -5,9 +5,9 @@
 
 A powerful Firefox extension that detects publication dates from web pages using multiple detection methods with confidence indicators. Perfect for journalists, researchers, and anyone who needs to verify when content was published.
 
-## 🆕 What's New in v1.3.0 (Beta)
+## 🆕 What's New in v1.2.4
 
-**International Support & Enhanced Detection** - Major update! Now supports multiple date formats (DD.MM.YYYY, DD/MM/YYYY, ISO 8601) and multi-language keywords (German, French, Italian). Enhanced URL structure analysis catches more date patterns. Position-based confidence helps distinguish main content from footer suggestions. Tested on BBC, DW, Bundeswehr, and international news sites. [See full changelog](CHANGELOG.md)
+**International Support & Smart Source Prioritization** - Major stable release! Supports 10+ languages and multiple date formats. Smart Open Graph prioritization eliminates duplicate dates from related articles. Position-based confidence system. Thoroughly tested on BBC, DW, Bundeswehr, and international sites. [See full changelog](CHANGELOG.md)
 
 ## Features
 
