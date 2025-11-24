@@ -5,6 +5,18 @@ All notable changes to Publishing Date Finder will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-11-24
+
+### Improved
+- **Smart content filtering**: Time elements and microdata from sidebars, recommended articles, and navigation are now excluded
+- Added `isInExcludedArea()` helper that checks parent elements for common sidebar/recommendation patterns
+- Reduces false positives from dates in "related articles", "trending", "popular posts" sections
+- Checks ARIA roles and semantic HTML tags (`<aside>`) for better accuracy
+
+### Fixed
+- Extension now focuses on main article content, ignoring dates from page periphery
+- Improved accuracy on news sites and blogs with multiple article dates on the same page
+
 ## [1.1.0] - 2025-11-24
 
 ### Added
