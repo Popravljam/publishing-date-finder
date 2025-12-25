@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Publishing Date Finder",
-  "version": "1.2.4",
+  "version": "1.2.6",
   "description": "Detects publication dates of web articles with confidence indicators",
   "icons": {
     "48": "icons/icon-48.png",
@@ -9,7 +9,7 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "publishing-date-finder@lazarcovs.com",
+      "id": "publishing-date-finder-v2@lazarcovs.com",
       "data_collection_permissions": {
         "required": ["none"]
       }

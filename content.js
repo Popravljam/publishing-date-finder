@@ -652,8 +652,9 @@
     }
   };
 
-  // Listen for messages from popup
-  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  // Listen for messages from popup (cross-browser compatible)
+  const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
+  browserAPI.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'getDates') {
       const dates = DateDetective.extractAllDates();
       sendResponse({ dates: dates, url: window.location.href });

@@ -5,6 +5,16 @@ All notable changes to Publishing Date Finder will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.6] - 2025-12-25
+
+### Fixed
+- **Chrome compatibility**: Fixed content script to work with both Chrome and Firefox APIs
+- Content script now uses cross-browser compatible API detection (browser vs chrome)
+- Resolved "Unable to analyze this page" error in Chrome/Chromium browsers
+
+### Changed
+- Updated version badge in popup UI to v1.2.6
+
 ## [1.2.5] - 2025-11-24
 
 ### Added

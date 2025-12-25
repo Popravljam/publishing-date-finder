@@ -29,12 +29,12 @@ cp popup-chrome.js "$BUILD_DIR/popup/popup.js"
 
 # Create zip for Chrome Web Store
 cd "$BUILD_DIR"
-zip -r ../publishing-date-finder-chrome-v1.2.5.zip . -x "*.DS_Store"
+zip -r ../publishing-date-finder-chrome-v1.2.6.zip . -x "*.DS_Store"
 cd ..
 
 echo ""
 echo "✅ Chrome extension built successfully!"
-echo "📦 Package: publishing-date-finder-chrome-v1.2.5.zip"
+echo "📦 Package: publishing-date-finder-chrome-v1.2.6.zip"
 echo ""
 echo "Next steps:"
 echo "1. Go to https://chrome.google.com/webstore/devconsole"
